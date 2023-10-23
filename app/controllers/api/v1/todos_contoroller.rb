@@ -32,4 +32,18 @@ class Api::v1::TodosContoroller < ApplicationContoroller
             render json: { error: "Failed to destroy" }, status: 422
         end
     end
+
+    def destory_all
+        if Todo.destroy_all
+            head :no_content　
+        else
+            render json: { error: "Failed to destroy" }, status: 422
+        end
+
+    end
+
+    private
+
+    def todo_params
+        params.require(:todo).permit(:name, :is_completed)
 end
