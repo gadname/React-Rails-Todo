@@ -35,7 +35,7 @@ class Api::v1::TodosContoroller < ApplicationContoroller
 
     def destory_all
         if Todo.destroy_all
-            head :no_content　
+            head :no_content
         else
             render json: { error: "Failed to destroy" }, status: 422
         end

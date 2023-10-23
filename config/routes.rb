@@ -9,7 +9,7 @@ get 'todos', to: 'site#index'
 get 'todos/new', to: 'site#index'
 get 'todos/:id/edit', to: 'site#index'
 
-namespace :api do
+namespace :api do ##do end はブロック
   namespace :v1 do
     delete '/todos/destroy_all', to: 'todos#destroy_all'
     resources :todos, only: %i[index show create update destroy]
