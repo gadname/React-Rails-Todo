@@ -6,11 +6,11 @@ return (
         isChecked={props.isDone}
         colorScheme="blue"
         size="lg"
-        onChange={() => {
-            props.toggleIsDone(props.index);
+        onChange={() => { {/*イベント時に発火アロー関数を用いて発火時の動作を追加できるよ!  */}
+            props.toggleIsDone(props.index);{/* 子コンポーネントで渡ってきている */}
         }}
         >
-    <Text>{props.name}</Text>
+    <Text>{props.name}</Text> {/*name 親タグのname= props.属性名でアクセス*/}
     </Checkbox>
     </Box>
 )

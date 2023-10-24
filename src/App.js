@@ -1,45 +1,83 @@
 import React, { useState, useEffect } from "react";
-import Task from './component/Task';
-import { Center, Box, CheckboxGroup, Text } from "@chakra-ui/react";
+import Task from "./component/Task";
+import {
+   Flex,
+   Center, 
+   Box, 
+   CheckboxGroup, 
+   Text,
+   Input,
+   Button,
+ } from "@chakra-ui/react";
+import axios from "axios";
 
 const App = () => {
-  const initialTasks = [
-    {
-      name: "買い物",
-      isDone: true,
-    },
-    {
-      name: "買い物",
-      isDone: false,
-    },
-    {
-      name: "プログラミングの勉強",
-      isDone: false,
-    },
-  ];
-  
+  const [tasks, setTasks] = useState([]);
+  const [name, setName] = useState("");
+
+  const fetch = async () => {
+    const res = await axios.get("http://localhost:3010/tasks");
+    setTasks(res.data);
+  };
+
+  const createTask = async () => {
+    await axios.post("http://localhost:3010/tasks", {
+      name: name,
+      is_done: false,
+    });
+    setName("")
+    fetch();
+  };
+
+  useEffect(() => {
+    fetch();
+  },[]);
+
+  const toggleIsDone = (index) => {
+    const tasksCopy = [...tasks]; //tasks配列のコピー作成
+    const isDone = tasksCopy[index].isDone;
+    tasksCopy[index].isDone = !isDone;
+    setTasks(tasksCopy);
+  };
+
   return (
     <Box mt="64px">
-    <Center>
-      <Box>
-        <Box mb="24px">
-          <Text fontsize="24px" fontWeight="bold">
-          タスク一覧
-          </Text>
-      </Box>
-      <CheckboxGroup>
-    <Task name="買い物" />
-    <Task name="ランニング" />
-    <Task name="プログラミングの勉強" />
-
-      </CheckboxGroup>
+      <Center>
+        <Box>
+          <Box mb="24px">
+            <Text fontSize="24px" fontWeight="bold">
+              タスク一覧
+            </Text>
+          </Box>
+          <Flex mb="24px">
+            <Input
+            placeholder="タスク名を入力"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            />
+            <Box ml="16px">
+            <Button colorScheme="teal" onClick={createTask}>
+              タスクを作成
+            </Button>
+            </Box>
+          </Flex>
+          <CheckboxGroup>
+            {tasks.map((task, index) => {
+              return (
+                <Task
+                  key={index}
+                  index={index}
+                  name={task.name}
+                  isDone={task.isDone}
+                  toggleIsDone={toggleIsDone}
+                />
+              );
+            })}
+          </CheckboxGroup>
+        </Box>
+      </Center>
     </Box>
-    </Center>
-    </Box>
-    
-  
   );
-
-}
+};
 
 export default App;
